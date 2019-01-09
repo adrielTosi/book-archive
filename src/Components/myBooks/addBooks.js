@@ -40,7 +40,6 @@ export default class AddBooks extends React.Component {
 
     render(){
         return (
-
             <div className = "addBooks-container">
                 <div>
                     <form onSubmit = {this.handleSubmit.bind(this)}>

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
-import AddBooks from './Components/myBooks/addBooks.js'
-
+import Header from './Components/Header/Header.js'
+import Main from './Components/myBooks/Main'
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <AddBooks />    
-      </div>
+      <div>
+        <Header/>
+        <Main/>  
+      </div> 
     );
   }
 }
