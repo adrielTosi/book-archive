@@ -2,7 +2,6 @@ import React from 'react'
 import './style.css'
 import BookCard from './bookCard'
 
-
 export default class AddBooks extends React.Component {
     constructor (props){
         super(props)
@@ -39,9 +38,6 @@ export default class AddBooks extends React.Component {
         this.setState( { listIsOpen: newListIsOpen } )
     }
 
-    testingGit(){
-        
-    }
     render(){
         return (
 
@@ -72,9 +68,7 @@ export default class AddBooks extends React.Component {
                             changeIsOpen = {this.changeIsOpen.bind(this)}
                         />
                     ))}
-                    
                 </div>
-
             </div>
 
         )
