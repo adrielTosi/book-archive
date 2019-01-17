@@ -1,5 +1,6 @@
 import React from 'react'
 import './style.css'
+import {Link} from 'react-router-dom'
 
 
 export default class BookCard extends React.Component {
@@ -46,11 +47,21 @@ export default class BookCard extends React.Component {
                     <div>
                         <h4> {this.props.bookInfo.volumeInfo.title} </h4>
                         <h6> {authors} </h6>
+
+                        <Link to = {{
+                            pathname: '/info',
+                            state: {
+                                Info: this.props.bookInfo
+                            }
+                        }}>More...</Link>
+                        <br/>
+                        <br/>
                         <button
-                        className = 'expand-button'
-                        onClick = {this.toggleOpen.bind(this)}>
-                        Contract
-                    </button>
+                            className = 'expand-button'
+                            onClick = {this.toggleOpen.bind(this)}>
+                                Contract
+                        </button>
+
                     </div>
                 </div>
             )}

@@ -1,14 +1,15 @@
 import React from 'react'
 import './style.css'
 import BookCard from './bookCard'
+import { connect } from 'react-redux'
 
-export default class AddBooks extends React.Component {
+
+class AddBooks extends React.Component {
     constructor (props){
         super(props)
 
         this.state = { 
             userInput: '',
-            userSearch: [],
             listIsOpen: [false,false,false,false,false,false,false,false,false,false]
          }
     }
@@ -20,13 +21,16 @@ export default class AddBooks extends React.Component {
 
     handleSubmit (e){
         e.preventDefault()
-        
         let val = this.state.userInput
         let ref = val.split(" ").join("+")
         let search = "https://www.googleapis.com/books/v1/volumes?q=" + ref
         fetch(search)
             .then(response => response.json())
-            .then(data => this.setState( { userSearch: data.items, listIsOpen: [false,false,false,false,false,false,false,false,false,false] } ) )
+            .then( data => this.props.dispatch({
+                type: "CHANGE_SEARCH",
+                newSearch: data.items
+            }))
+            .then(this.setState( { listIsOpen: [false,false,false,false,false,false,false,false,false,false]} ))
     }
 
     changeIsOpen (index){
@@ -58,7 +62,7 @@ export default class AddBooks extends React.Component {
 
                 <div className = 'map-bookcard'>
                     
-                    {this.state.userSearch.map((info, index) => (
+                    {this.props.userSearch.map((info, index) => (
                         <BookCard 
                             key = {index}
                             bookInfo = {info}
@@ -74,3 +78,10 @@ export default class AddBooks extends React.Component {
     }
 
 }
+
+
+function mapStateToProps (reduxState){
+    return  { userSearch: reduxState.userSearch } 
+}
+
+export default connect(mapStateToProps)(AddBooks)
