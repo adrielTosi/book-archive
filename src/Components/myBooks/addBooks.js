@@ -2,7 +2,7 @@ import React from 'react'
 import './style.css'
 import BookCard from './bookCard'
 import { connect } from 'react-redux'
-
+import  {changeSearch} from '../../Redux/actionCreator'
 
 class AddBooks extends React.Component {
     constructor (props){
@@ -26,10 +26,7 @@ class AddBooks extends React.Component {
         let search = "https://www.googleapis.com/books/v1/volumes?q=" + ref
         fetch(search)
             .then(response => response.json())
-            .then( data => this.props.dispatch({
-                type: "CHANGE_SEARCH",
-                newSearch: data.items
-            }))
+            .then( data => this.props.changeSearch(data.items))
             .then(this.setState( { listIsOpen: [false,false,false,false,false,false,false,false,false,false]} ))
     }
 
@@ -48,8 +45,9 @@ class AddBooks extends React.Component {
                 <div>
                     <form onSubmit = {this.handleSubmit.bind(this)}>
                     
-                    <label>Name:  </label>
-                    <input  
+                    <label htmlFor = 'books-name'>Name:  </label>
+                    <input
+                    id = 'books-name'  
                     type = "text" 
                     placeholder = "Book's name" 
                     onChange = {this.handleChange.bind(this)}
@@ -84,4 +82,4 @@ function mapStateToProps (reduxState){
     return  { userSearch: reduxState.userSearch } 
 }
 
-export default connect(mapStateToProps)(AddBooks)
+export default connect(mapStateToProps, { changeSearch })(AddBooks)
