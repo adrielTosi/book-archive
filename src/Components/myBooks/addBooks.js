@@ -3,31 +3,30 @@ import './style.css'
 import BookCard from './bookCard'
 import { connect } from 'react-redux'
 import  {changeSearch} from '../../Redux/actionCreator'
+import FormContainer from './FormContainer'
 
 class AddBooks extends React.Component {
     constructor (props){
         super(props)
-
         this.state = { 
-            userInput: '',
             listIsOpen: [false,false,false,false,false,false,false,false,false,false]
          }
+
+    this.handleFetch = this.handleFetch.bind(this)
     }
 
-    handleChange (e){
-        let val = e.target.value
-        this.setState({ userInput: val })
-    }
 
-    handleSubmit (e){
-        e.preventDefault()
-        let val = this.state.userInput
-        let ref = val.split(" ").join("+")
+    handleFetch (userInput){
+        console.log(this.props)
+        let ref = userInput.split(" ").join("+")
         let search = "https://www.googleapis.com/books/v1/volumes?q=" + ref
         fetch(search)
             .then(response => response.json())
-            .then( data => this.props.changeSearch(data.items))
-            .then(this.setState( { listIsOpen: [false,false,false,false,false,false,false,false,false,false]} ))
+            .then(data => {
+                console.log(this.props)
+                this.props.changeSearch(data.items)})
+            .then(() => this.setState( { listIsOpen: [false,false,false,false,false,false,false,false,false,false] } ))
+
     }
 
     changeIsOpen (index){
@@ -39,24 +38,12 @@ class AddBooks extends React.Component {
         this.setState( { listIsOpen: newListIsOpen } )
     }
 
+
     render(){
         return (
             <div className = "addBooks-container">
-                <div>
-                    <form onSubmit = {this.handleSubmit.bind(this)}>
-                    
-                    <label htmlFor = 'books-name'>Name:  </label>
-                    <input
-                    id = 'books-name'  
-                    type = "text" 
-                    placeholder = "Book's name" 
-                    onChange = {this.handleChange.bind(this)}
-                    value = {this.state.userInput} />   
-                    
-
-                    <input type ="submit" value = "Search" />
-                    </form>
-                </div>
+                
+                <FormContainer handleFetch = {this.handleFetch}/>
 
                 <div className = 'map-bookcard'>
                     
