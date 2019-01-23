@@ -17,16 +17,16 @@ class AddBooks extends React.Component {
 
 
     handleFetch (userInput){
-        console.log(this.props)
-        let ref = userInput.split(" ").join("+")
-        let search = "https://www.googleapis.com/books/v1/volumes?q=" + ref
-        fetch(search)
-            .then(response => response.json())
-            .then(data => {
-                console.log(this.props)
-                this.props.changeSearch(data.items)})
-            .then(() => this.setState( { listIsOpen: [false,false,false,false,false,false,false,false,false,false] } ))
-
+        if(userInput !== ''){
+            let ref = userInput.split(" ").join("+")
+            let search = "https://www.googleapis.com/books/v1/volumes?q=" + ref
+            fetch(search)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(this.props)
+                    this.props.changeSearch(data.items)})
+                .then(() => this.setState( { listIsOpen: [false,false,false,false,false,false,false,false,false,false] } ))
+        }
     }
 
     changeIsOpen (index){
