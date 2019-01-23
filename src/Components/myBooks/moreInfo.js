@@ -1,13 +1,20 @@
 import React from "react"
 import './style.css'
+import NOCOVER from '../../NOCOVER.jpg'
 
 export default class MoreInfo extends React.Component {
 
     render (){
+        let thumbnail
+        if(this.props.location.state.Info.volumeInfo.imageLinks === undefined){
+            thumbnail = <img src = {NOCOVER} alt = 'No book cover'></img>
+        } else {
+            thumbnail = <img src = {this.props.location.state.Info.volumeInfo.imageLinks.thumbnail} alt = 'No book cover'></img>
+        }
         return (
             <div className = 'moreInfo'>
                 <div>
-                    <img src = {this.props.location.state.Info.volumeInfo.imageLinks.thumbnail} alt = 'No book cover'></img>
+                    {thumbnail}
                 </div>
                 
                 <div className = 'volume-info'>                
