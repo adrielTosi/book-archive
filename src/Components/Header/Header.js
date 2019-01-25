@@ -5,10 +5,17 @@ const Header = () => {
     return (
         <div className = "header-container">
             <div>
-                <Link to = "/about">About</Link>
+                <Link to = "/">Home</Link>
             </div>
             <div>
+                <Link to = "/about">About</Link>
+            </div>
+            
+            <div>
                 <Link to = "/contact">Contact</Link>
+            </div>
+            <div>
+                <Link to = "/haveRead">Books I've Read</Link>
             </div>
 
         </div>
