@@ -20,14 +20,14 @@ export default class HaveRead extends React.Component {
     }
 
     componentDidMount(){
-        let haveReadItens = JSON.parse(localStorage.getItem('haveRead'))
+        let haveReadItens = JSON.parse(localStorage.getItem('haveRead')) //set LocalStorage into state
         this.setState( { haveReadItens } )
     }
 
     render(){
         return(
             <div>
-                {this.state.haveReadItens == [] && (
+                {this.state.haveReadItens === [] && ( //no working. find out why
                     <p>No books yet!</p>
                 )}
 
@@ -37,7 +37,7 @@ export default class HaveRead extends React.Component {
                     <BookCard
                         bookInfo = {info}
                         id = {info.id}
-                        haveRead = {true}
+                        canAddToHaveRead = {false}
                         canDelete = {true}
                         handleDeleteFromHaveRead = {this.handleDeleteFromHaveRead}
                      />)

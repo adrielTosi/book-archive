@@ -10,6 +10,7 @@ class AddBooks extends React.Component {
         super(props)
 
     this.handleFetch = this.handleFetch.bind(this)
+    this.handleAddHaveRead = this.handleAddHaveRead.bind(this)
     }
 
 
@@ -20,6 +21,49 @@ class AddBooks extends React.Component {
             fetch(search)
                 .then(response => response.json())
                 .then(data => this.props.changeSearch(data.items))
+        }
+    }
+
+    handleAddHaveRead(bookInfo){
+        let newStorage, author, thumbnail
+        let currentStorage = []
+
+        if(localStorage.getItem('haveRead') !== null){ //check if haveRead exists
+            currentStorage = JSON.parse(localStorage.getItem('haveRead'))
+        }
+
+        if(bookInfo.volumeInfo.authors === undefined){ // check if authors exists
+            author = 'No Author'
+        } else {
+            author = bookInfo.volumeInfo.authors
+        }
+
+        if(bookInfo.volumeInfo.imageLinks === undefined){ //check if thumbnail exists
+            thumbnail = 'NO BOOK COVER'
+        } else {
+            thumbnail = bookInfo.volumeInfo.imageLinks.thumbnail
+        }
+
+        let exists = currentStorage.some( ele => ele.id === bookInfo.id)
+
+        if(!exists){
+        newStorage = [...currentStorage,{
+            id: bookInfo.id,
+            volumeInfo: {
+                authors: author, //if no author insert 'no author'
+                imageLinks: {thumbnail: thumbnail} , // if no imageLinks insert NOCOVER -- NOT WORKING
+                title: bookInfo.volumeInfo.title,
+                pageCount: bookInfo.volumeInfo.pageCount,
+                description: bookInfo.volumeInfo.description,
+                language:bookInfo.volumeInfo.language , 
+                publisher: bookInfo.volumeInfo.publisher, 
+                publishedDate: bookInfo.volumeInfo.publishedDate, 
+                categories:bookInfo.volumeInfo.categories
+
+            }
+        }]
+
+        localStorage.setItem('haveRead', JSON.stringify(newStorage))
         }
     }
 
@@ -34,10 +78,11 @@ class AddBooks extends React.Component {
                 <div className = 'map-bookcard'>
                     {this.props.userSearch.map((info, index) => (
                         <BookCard 
-                            bookInfo = {info}
+                            bookInfo = {info} //this info is in Redux State
                             key = {index}
-                            haveRead = {false}
+                            canAddToHaveRead = {true} //change to canAddToHaveRead(opposite logic)
                             canDelete = {false}
+                            handleAddHaveRead = {this.handleAddHaveRead }
                         />
                     ))}
                 </div>

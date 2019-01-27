@@ -10,48 +10,10 @@ export default class MoreInfo extends React.Component {
         this.props.history.goBack()
     }
 
-    handleHaveRead(){
-        let newStorage, author, thumbnail
-        let currentStorage = []
-
-        if(localStorage.getItem('haveRead') !== null){ //check if haveRead exists
-            currentStorage = JSON.parse(localStorage.getItem('haveRead'))
-        }
-
-        if(this.props.location.state.Info.volumeInfo.authors === undefined){ // check if authors exists
-            author = 'No Author'
-        } else {
-            author = this.props.location.state.Info.volumeInfo.authors
-        }
-
-        if(this.props.location.state.Info.volumeInfo.imageLinks === undefined){ //check if thumbnail exists
-            thumbnail = 'NO BOOK COVER'
-        } else {
-            thumbnail = this.props.location.state.Info.volumeInfo.imageLinks.thumbnail
-        }
-
-        let exists = currentStorage.some( ele => ele.id === this.props.location.state.Info.id)
-
-        if(!exists){
-        newStorage = [...currentStorage,{
-            id: this.props.location.state.Info.id,
-            volumeInfo: {
-                authors: author, //if no author insert 'no author'
-                imageLinks: {thumbnail: thumbnail} , // if no imageLinks insert NOCOVER -- NOT WORKING
-                title: this.props.location.state.Info.volumeInfo.title,
-                pageCount: this.props.location.state.Info.volumeInfo.pageCount,
-                description: this.props.location.state.Info.volumeInfo.description,
-                language:this.props.location.state.Info.volumeInfo.language , 
-                publisher: this.props.location.state.Info.volumeInfo.publisher, 
-                publishedDate: this.props.location.state.Info.volumeInfo.publishedDate, 
-                categories:this.props.location.state.Info.volumeInfo.categories
-
-            }
-        }]
-
-        localStorage.setItem('haveRead', JSON.stringify(newStorage))
-        }
+    __handleAddHaveRead(){
+        this.props.handleAddHaveRead(this.props.location.state.Info)
     }
+
     render (){
         let thumbnail, author
         //handling no cover
@@ -89,10 +51,9 @@ export default class MoreInfo extends React.Component {
                     </p>
                     <br/>
 
-                    {this.props.location.state.haveRead === false  && 
-                    //appears only when coming from addBooks 
-                    //and in the future from WannaRead
-                        (<button onClick = {this.handleHaveRead.bind(this)}> I have Read this book</button>)}
+                    {this.props.location.state.canAddToHaveRead === true  && //change to canAddToHaveRead (opposite logic)
+                    //appears only when coming from addBooks and in the future from WannaRead
+                        (<button onClick = {this.__handleAddHaveRead.bind(this)}> I have Read this book</button>)}
 
                     <button className = 'link-button' onClick = {this.handleBack.bind(this)}> Back </button>
                 </div>

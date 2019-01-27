@@ -27,6 +27,10 @@ export default class BookCard extends React.Component {
         this.props.handleDeleteFromHaveRead(this.props.bookInfo.id)
     }
 
+    _handleAddToHaveRead(){
+        this.props.handleAddHaveRead(this.props.bookInfo)
+    }
+
     render(){
         let authors,
             thumbnail
@@ -59,12 +63,16 @@ export default class BookCard extends React.Component {
                             pathname: '/info',
                             state: {
                                 Info: this.props.bookInfo,
-                                haveRead: this.props.haveRead
+                                canAddToHaveRead: this.props.canAddToHaveRead, //change to canAddToHaveRead
+                                handleAddHaveRead: this._handleAddHaveRead
                             }
                         }}>More...</Link>
                         <br/>
                         {this.props.canDelete === true && (
                             <button onClick = {this._handleDeleteFromHaveRead.bind(this)}>Delete</button>
+                        )}
+                        {this.props.canAddToHaveRead === true && (
+                            <button onClick = {this._handleAddToHaveRead.bind(this)}>Add</button> //in future, two options, haveRead e WannaRead
                         )}
                     </div>
                 </div>
