@@ -1,3 +1,8 @@
+.done {
+    margin-left: 5px;
+    max-height: 10px;
+}
+
 .header-container{
     display:grid;
     justify-items: center;

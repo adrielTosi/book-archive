@@ -2,6 +2,7 @@ import React from 'react'
 import '../style.css'
 import {Link} from 'react-router-dom'
 import NOCOVER from '../../../NOCOVER.jpg'
+import done from '../../../done.png'
 
 //accepted props
 //bookInfo: <-----
@@ -22,6 +23,12 @@ import NOCOVER from '../../../NOCOVER.jpg'
 //canDelete: makes possible deleting from the haveRead list
 
 export default class BookCard extends React.Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            isAdded: false
+        }
+    }
    
     _handleDeleteFromHaveRead(){
         this.props.handleDeleteFromHaveRead(this.props.bookInfo.id)
@@ -29,8 +36,17 @@ export default class BookCard extends React.Component {
 
     _handleAddToHaveRead(){
         this.props.handleAddHaveRead(this.props.bookInfo)
+        this.setState( { isAdded: true } )
     }
 
+    componentDidMount(){
+        let currentList = JSON.parse(localStorage.getItem('haveRead'))
+        let exists = currentList.some(book => book.id === this.props.bookInfo.id)
+
+        if(exists){
+            this.setState( { isAdded: true } )
+        }
+    }
     render(){
         let authors,
             thumbnail
@@ -65,6 +81,7 @@ export default class BookCard extends React.Component {
                                 Info: this.props.bookInfo,
                                 canAddToHaveRead: this.props.canAddToHaveRead, //change to canAddToHaveRead
                                 handleAddHaveRead: this._handleAddHaveRead
+                                //couldn't pass function props foward, but it worked when passing a internal function
                             }
                         }}>More...</Link>
                         <br/>
@@ -74,6 +91,11 @@ export default class BookCard extends React.Component {
                         {this.props.canAddToHaveRead === true && (
                             <button onClick = {this._handleAddToHaveRead.bind(this)}>Add</button> //in future, two options, haveRead e WannaRead
                         )}
+
+                        {this.state.isAdded === true && this.props.canAddToHaveRead === true && (
+                            <span ><img src = {done} alt = 'added' className = 'done'></img></span>
+                        )}
+
                     </div>
                 </div>
             </div>
