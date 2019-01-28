@@ -40,9 +40,12 @@ export default class BookCard extends React.Component {
     }
 
     componentDidMount(){
-        let currentList = JSON.parse(localStorage.getItem('haveRead'))
-        let exists = currentList.some(book => book.id === this.props.bookInfo.id)
-
+        let currentList
+        let exists = false
+        if(JSON.parse(localStorage.getItem('haveRead')) !== null){
+            currentList= JSON.parse(localStorage.getItem('haveRead'))
+            exists = currentList.some(book => book.id === this.props.bookInfo.id)
+        }
         if(exists){
             this.setState( { isAdded: true } )
         }
@@ -79,7 +82,7 @@ export default class BookCard extends React.Component {
                             pathname: '/info',
                             state: {
                                 Info: this.props.bookInfo,
-                                canAddToHaveRead: this.props.canAddToHaveRead, //change to canAddToHaveRead
+                                canAddToHaveRead: this.props.canAddToHaveRead,
                                 handleAddHaveRead: this._handleAddHaveRead
                                 //couldn't pass function props foward, but it worked when passing a internal function
                             }
