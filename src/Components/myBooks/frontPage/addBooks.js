@@ -4,6 +4,7 @@ import BookCard from './bookCard'
 import { connect } from 'react-redux'
 import  {changeSearch} from '../../../Redux/actionCreator'
 import FormContainer from './FormContainer'
+import fire from '../../../config/fire'
 
 class AddBooks extends React.Component {
     constructor (props){
@@ -11,6 +12,10 @@ class AddBooks extends React.Component {
 
     this.handleFetch = this.handleFetch.bind(this)
     this.handleAddHaveRead = this.handleAddHaveRead.bind(this)
+    }
+
+    logout(){
+        fire.auth().signOut()
     }
 
 
@@ -67,6 +72,15 @@ class AddBooks extends React.Component {
         }
     }
 
+    componentDidMount(){
+        let displayName
+        fire.auth().onAuthStateChanged ( user => {
+            if(user){
+                console.log(user.displayName)
+            }else {
+            }
+          })
+    }
 
     render(){
 
@@ -86,6 +100,9 @@ class AddBooks extends React.Component {
                         />
                     ))}
                 </div>
+                <br/>
+                <br/>
+                <button onClick = {this.logout.bind(this)}>Log Out</button>
             </div>
 
         )

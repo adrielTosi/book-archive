@@ -5,6 +5,8 @@ import About from '../Header/About.js'
 import Contact from '../Header/Contact.js'
 import MoreInfo from './frontPage/moreInfo'
 import HaveRead from './HaveRead/haveRead'
+import Signup from '../Authentication/Signup'
+import App from '../../App'
 
 
 function Main () {
