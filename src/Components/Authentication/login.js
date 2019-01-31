@@ -1,7 +1,7 @@
 import React from 'react'
 import fire from '../../config/fire'
 import '../../Components/myBooks/style.css'
-import Signup from './Signup'
+import Signup from './signup'
 
 export default class Login extends React.Component {
     constructor(props){
