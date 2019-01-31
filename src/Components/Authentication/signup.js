@@ -22,7 +22,7 @@ export default class Singup extends React.Component {
         fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then(data =>{
                 const {user} = data
-                if(user){
+                if(user){               //have to verify if the username already exists
                     user.updateProfile({
                         displayName: this.state.username
                     })
@@ -43,7 +43,7 @@ export default class Singup extends React.Component {
     
     componentDidMount(){
         this.authListener()
-      }
+    }
     
     _handleSignUp(){
         this.props.handleSignUp()

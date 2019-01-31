@@ -32,7 +32,9 @@ export default class Login extends React.Component {
     render(){
         return (
             <div>
-                {this.state.signup ? (<Signup handleSignUp = {this.handleSignUp}/>) : (
+                {this.state.signup 
+                ?  (<Signup handleSignUp = {this.handleSignUp}/>)
+                : (
                     <form>
                     <div className = 'email'>
                         <label htmlFor = 'emailInput' >Email Address: </label>

@@ -5,19 +5,23 @@ import NOCOVER from '../../../NOCOVER.jpg'
 //This component deals with adding to the list of HaveRead books
 
 export default class MoreInfo extends React.Component {
-    
+    constructor(){
+        super()
+        this.__handleAddToHaveRead = this.__handleAddToHaveRead.bind(this)
+    }
+
     handleBack(){
         this.props.history.goBack()
     }
 
-    __handleAddHaveRead(){
-        this.props.handleAddHaveRead(this.props.location.state.Info)
+    __handleAddToHaveRead(){
+        this.props.location.state._handleAddToHaveRead()
     }
 
     render (){
         let thumbnail, author
         //handling no cover
-        if(this.props.location.state.Info.volumeInfo.imageLinks === undefined){
+        if(this.props.location.state.Info.volumeInfo.imageLinks === undefined){ //change to 'no book cover'
             thumbnail = <img src = {NOCOVER} alt = 'No book cover'></img>
         } else {
             thumbnail = <img src = {this.props.location.state.Info.volumeInfo.imageLinks.thumbnail} alt = 'No book cover'></img>
@@ -51,10 +55,10 @@ export default class MoreInfo extends React.Component {
                     </p>
                     <br/>
 
-                    {this.props.location.state.canAddToHaveRead === true  && //change to canAddToHaveRead (opposite logic)
+                    {this.props.location.state.canAddToHaveRead === true  && 
                     //appears only when coming from addBooks and in the future from WannaRead
-                        (<button onClick = {this.__handleAddHaveRead.bind(this)}> I have Read this book</button>)}
-
+                      (<button onClick = {this.__handleAddToHaveRead.bind(this)}> I have Read this book</button>)}
+                       {/*handleAddToHaveRead is not a function*/ } 
                     <button className = 'link-button' onClick = {this.handleBack.bind(this)}> Back </button>
                 </div>
             </div>

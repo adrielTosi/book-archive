@@ -28,18 +28,19 @@ export default class BookCard extends React.Component {
         this.state = {
             isAdded: false
         }
+    this._handleAddToHaveRead = this._handleAddToHaveRead.bind(this)
     }
    
     _handleDeleteFromHaveRead(){
-        this.props.handleDeleteFromHaveRead(this.props.bookInfo.id)
+        this.props.handleDeleteFromHaveRead(this.props.bookInfo.volumeInfo.id) //this ID comes directly from Google Books API
     }
 
     _handleAddToHaveRead(){
-        this.props.handleAddHaveRead(this.props.bookInfo)
-        this.setState( { isAdded: true } )
+        this.props.handleAddToHaveRead(this.props.bookInfo)
+        //this.setState( { isAdded: true } )
     }
 
-    componentDidMount(){
+    componentDidMount(){ //make a lot of requests to firebase will decrease performance, make it only when adding
         let currentList
         let exists = false
         if(JSON.parse(localStorage.getItem('haveRead')) !== null){
@@ -55,14 +56,14 @@ export default class BookCard extends React.Component {
             thumbnail
             
         // Handling author name
-        if(this.props.bookInfo.volumeInfo.authors === undefined){
+        if(this.props.bookInfo.volumeInfo.authors === 'no author' || this.props.bookInfo.volumeInfo.authors === undefined){
             authors = 'No Author'
         } else {
             authors = this.props.bookInfo.volumeInfo.authors.join(", ")
         }
 
-        // Handling thumbnail image
-        if(this.props.bookInfo.volumeInfo.imageLinks === undefined){
+        // // Handling thumbnail image
+        if(this.props.bookInfo.volumeInfo.imageLinks === 'no cover' || this.props.bookInfo.volumeInfo.imageLinks === undefined){
             thumbnail = <img src = {NOCOVER} alt = 'No book cover'></img>
         } else {
             thumbnail = <img src = {this.props.bookInfo.volumeInfo.imageLinks.thumbnail} alt = 'No book cover'></img>
@@ -83,7 +84,7 @@ export default class BookCard extends React.Component {
                             state: {
                                 Info: this.props.bookInfo,
                                 canAddToHaveRead: this.props.canAddToHaveRead,
-                                handleAddHaveRead: this._handleAddHaveRead
+                                _handleAddToHaveRead: this._handleAddToHaveRead
                                 //couldn't pass function props foward, but it worked when passing a internal function
                             }
                         }}>More...</Link>

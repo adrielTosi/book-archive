@@ -5,13 +5,17 @@ import { connect } from 'react-redux'
 import  {changeSearch} from '../../../Redux/actionCreator'
 import FormContainer from './FormContainer'
 import fire from '../../../config/fire'
+import dealWithProps from '../dealWithProps'
 
 class AddBooks extends React.Component {
     constructor (props){
         super(props)
-
+    this.state = {
+        username: ''
+    }
     this.handleFetch = this.handleFetch.bind(this)
-    this.handleAddHaveRead = this.handleAddHaveRead.bind(this)
+    this.handleAddToHaveRead = this.handleAddToHaveRead.bind(this)
+
     }
 
     logout(){
@@ -29,61 +33,39 @@ class AddBooks extends React.Component {
         }
     }
 
-    handleAddHaveRead(bookInfo){
-        let newStorage, author, thumbnail
-        let currentStorage = []
-
-        if(localStorage.getItem('haveRead') !== null){ //check if haveRead exists
-            currentStorage = JSON.parse(localStorage.getItem('haveRead'))
-        }
-
-        if(bookInfo.volumeInfo.authors === undefined){ // check if authors exists
-            author = 'No Author'
-        } else {
-            author = bookInfo.volumeInfo.authors
-        }
-
-        if(bookInfo.volumeInfo.imageLinks === undefined){ //check if thumbnail exists
-            thumbnail = 'NO BOOK COVER'
-        } else {
-            thumbnail = bookInfo.volumeInfo.imageLinks.thumbnail
-        }
-
-        let exists = currentStorage.some( ele => ele.id === bookInfo.id)
-
-        if(!exists){
-        newStorage = [...currentStorage,{
-            id: bookInfo.id,
+    handleAddToHaveRead(bookInfo){ //modify to firebase
+        let newStorage
+        const database = fire.database().ref('/' + this.state.username + '/haveRead')
+        
+        newStorage =  {
             volumeInfo: {
-                authors: author, //if no author insert 'no author'
-                imageLinks: {thumbnail: thumbnail} , // if no imageLinks insert NOCOVER -- NOT WORKING
+                id: bookInfo.id,
+                authors: bookInfo.volumeInfo.authors, 
+                imageLinks: bookInfo.volumeInfo.imageLinks,
                 title: bookInfo.volumeInfo.title,
                 pageCount: bookInfo.volumeInfo.pageCount,
                 description: bookInfo.volumeInfo.description,
                 language:bookInfo.volumeInfo.language , 
                 publisher: bookInfo.volumeInfo.publisher, 
                 publishedDate: bookInfo.volumeInfo.publishedDate, 
-                categories:bookInfo.volumeInfo.categories
-
+                categories:bookInfo.volumeInfo.categories}
             }
-        }]
 
-        localStorage.setItem('haveRead', JSON.stringify(newStorage))
-        }
+        newStorage = dealWithProps(newStorage) //imported function to deal with undefined props
+        database.update( { [bookInfo.id]: newStorage } )
+
     }
 
+
     componentDidMount(){
-        let displayName
         fire.auth().onAuthStateChanged ( user => {
             if(user){
-                console.log(user.displayName)
-            }else {
+                this.setState( { username: user.displayName } )
             }
-          })
+        })
     }
 
     render(){
-
         return (
             <div className = "addBooks-container">
                 
@@ -94,9 +76,9 @@ class AddBooks extends React.Component {
                         <BookCard 
                             bookInfo = {info} //this info is in Redux State
                             key = {index}
-                            canAddToHaveRead = {true} //change to canAddToHaveRead(opposite logic)
+                            canAddToHaveRead = {true} 
                             canDelete = {false}
-                            handleAddHaveRead = {this.handleAddHaveRead }
+                            handleAddToHaveRead = {this.handleAddToHaveRead}
                         />
                     ))}
                 </div>
