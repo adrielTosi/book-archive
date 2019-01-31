@@ -6,12 +6,17 @@ import  {changeSearch} from '../../../Redux/actionCreator'
 import FormContainer from './FormContainer'
 import fire from '../../../config/fire'
 import dealWithProps from '../dealWithProps'
+import Loading from '../../Loading/loading'
+import BookList from './BookList'
+
+
 
 class AddBooks extends React.Component {
     constructor (props){
         super(props)
     this.state = {
-        username: ''
+        username: '',
+        isLoading: false
     }
     this.handleFetch = this.handleFetch.bind(this)
     this.handleAddToHaveRead = this.handleAddToHaveRead.bind(this)
@@ -65,23 +70,19 @@ class AddBooks extends React.Component {
         })
     }
 
+
+
     render(){
         return (
             <div className = "addBooks-container">
                 
                 <FormContainer handleFetch = {this.handleFetch}/>
 
-                <div className = 'map-bookcard'>
-                    {this.props.userSearch.map((info, index) => (
-                        <BookCard 
-                            bookInfo = {info} //this info is in Redux State
-                            key = {index}
-                            canAddToHaveRead = {true} 
-                            canDelete = {false}
-                            handleAddToHaveRead = {this.handleAddToHaveRead}
-                        />
-                    ))}
-                </div>
+                <BookList 
+                userSearch = {this.props.userSearch} 
+                handleAddToHaveRead = {this.handleAddToHaveRead}
+                />
+
                 <br/>
                 <br/>
                 <button onClick = {this.logout.bind(this)}>Log Out</button>

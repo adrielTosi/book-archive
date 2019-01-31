@@ -13,7 +13,6 @@ function Main () {
             <Route exact path = '/' component = {addBooks}/>
             <Route path = '/about' component = {About}/>
             <Route path = '/contact' component = {Contact}/>
-            <Route path = '/info' component = {MoreInfo}/>
             <Route path = '/haveRead' component = {HaveRead}/>
         </Switch>
     )

@@ -1,8 +1,8 @@
 import React from 'react'
 import '../style.css'
-import {Link} from 'react-router-dom'
 import NOCOVER from '../../../NOCOVER.jpg'
 import done from '../../../done.png'
+import MoreInfo from './moreInfo'
 
 //accepted props
 //bookInfo: <-----
@@ -26,31 +26,27 @@ export default class BookCard extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            isAdded: false
+            isAdded: false,
+            toggleInfo: false
         }
     this._handleAddToHaveRead = this._handleAddToHaveRead.bind(this)
     }
    
     _handleDeleteFromHaveRead(){
         this.props.handleDeleteFromHaveRead(this.props.bookInfo.volumeInfo.id) //this ID comes directly from Google Books API
+        this.setState( { isAdded: true } )
     }
+
 
     _handleAddToHaveRead(){
         this.props.handleAddToHaveRead(this.props.bookInfo)
         //this.setState( { isAdded: true } )
     }
 
-    componentDidMount(){ //make a lot of requests to firebase will decrease performance, make it only when adding
-        let currentList
-        let exists = false
-        if(JSON.parse(localStorage.getItem('haveRead')) !== null){
-            currentList= JSON.parse(localStorage.getItem('haveRead'))
-            exists = currentList.some(book => book.id === this.props.bookInfo.id)
-        }
-        if(exists){
-            this.setState( { isAdded: true } )
-        }
+    handleToggleInfo(){
+        this.setState( { toggleInfo: !this.state.toggleInfo } )
     }
+
     render(){
         let authors,
             thumbnail
@@ -78,25 +74,31 @@ export default class BookCard extends React.Component {
                     <div>
                         <h4> {this.props.bookInfo.volumeInfo.title} </h4>
                         <h6> {authors} </h6>
-
-                        <Link to = {{
-                            pathname: '/info',
-                            state: {
-                                Info: this.props.bookInfo,
-                                canAddToHaveRead: this.props.canAddToHaveRead,
-                                _handleAddToHaveRead: this._handleAddToHaveRead
-                                //couldn't pass function props foward, but it worked when passing a internal function
-                            }
-                        }}>More...</Link>
                         <br/>
-                        {this.props.canDelete === true && (
+
+                        {(!this.state.toggleInfo) && (
+                        <span onClick = {this.handleToggleInfo.bind(this)} className = 'toggle-info'>More...</span>
+                        )}
+
+{/*Toggle Info*/}       {this.state.toggleInfo === true && (
+                        <div>
+                            <MoreInfo 
+                            Info ={this.props.bookInfo} 
+                            />
+
+                        <span onClick = {this.handleToggleInfo.bind(this)} className = 'toggle-info'>Less...</span>
+                        </div>
+                        )}
+
+                        <br/>
+{/*Delete book*/}       {this.props.canDelete === true && (
                             <button onClick = {this._handleDeleteFromHaveRead.bind(this)}>Delete</button>
                         )}
-                        {this.props.canAddToHaveRead === true && (
+{/*add book to list*/}  {this.props.canAddToHaveRead === true && (
                             <button onClick = {this._handleAddToHaveRead.bind(this)}>Add</button> //in future, two options, haveRead e WannaRead
                         )}
 
-                        {this.state.isAdded === true && this.props.canAddToHaveRead === true && (
+{/*Add confirm*/}       {this.state.isAdded === true && this.props.canAddToHaveRead === true && (
                             <span ><img src = {done} alt = 'added' className = 'done'></img></span>
                         )}
 

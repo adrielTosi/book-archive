@@ -1,15 +1,17 @@
 import React from 'react'
 import BookCard from '../frontPage/bookCard';
 import fire from '../../../config/fire'
+import '../style.css'
 import NOCOVER from '../../../NOCOVER.jpg'
-
+import Loading from '../../Loading/loading'
 
 export default class HaveRead extends React.Component {
     constructor (props){
         super(props)
         this.state = {
             haveReadItens: {},
-            username: ''
+            username: '',
+            isLoading: false
         }
     this.handleDeleteFromHaveRead = this.handleDeleteFromHaveRead.bind(this)
     this.handleObjectToArray = this.handleObjectToArray.bind(this)
@@ -30,9 +32,13 @@ export default class HaveRead extends React.Component {
         fire.auth().onAuthStateChanged ( user => {
             if(user){
                 this.database.ref(`/${user.displayName}/haveRead`).once('value')
-                .then(snap => this.setState( { haveReadItens: snap.val(), username: user.displayName } ))   
+                .then(snap => this.setState( { haveReadItens: snap.val(), username: user.displayName } ))  
+                .then(() => this.setState( { isLoading: false } )) 
             }
         })
+    }
+    componentWillMount(){
+        this.setState( { isLoading: true } )
     }
 
     handleObjectToArray(obj){ //makes data from firebase (JSON-like tree) an array of objects
@@ -44,6 +50,12 @@ export default class HaveRead extends React.Component {
     }
                  
     render(){
+        if(this.state.isLoading){
+            return (
+            <div className = 'loading-page'>
+                {Loading('bars', '#f6b564', '10%', '10%')}
+            </div>)
+        }else{
         let arrayOfBooks = this.handleObjectToArray(this.state.haveReadItens)
         return(
             <div>
@@ -62,10 +74,8 @@ export default class HaveRead extends React.Component {
                         handleDeleteFromHaveRead = {this.handleDeleteFromHaveRead}
                         /> )
                 )}
-
-
-               
             </div>
-        )
+            )
+        }
     }
 }
