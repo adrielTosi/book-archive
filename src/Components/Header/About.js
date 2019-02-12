@@ -14,8 +14,17 @@ class About extends React.Component{
     
     render(){
         return (
-            <div>
-                This is the About page
+            <div className = 'about-page'>
+                This is a pet project made to study React. It has used React, React-router, Redux, Firebase and Sass.
+                <br/>
+                <br/>
+                Adriel Tosi. 
+                <br/>
+                <a href = 'https://www.upwork.com/freelancers/~01cf6056c175469e6a?viewMode=1'>Upwork profile </a>
+                <br/>
+                <br/>
+
+                Book Archive 0.1
             </div>
         )
         }
