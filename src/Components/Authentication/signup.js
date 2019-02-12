@@ -1,6 +1,6 @@
 import React from 'react'
 import fire from '../../config/fire'
-import '../../Components/myBooks/style.css'
+import '../../SASS/App.scss'
 
 export default class Singup extends React.Component {
     constructor (){
@@ -9,7 +9,11 @@ export default class Singup extends React.Component {
             user: {},
             username: '',
             email: '',
-            password:''
+            password:'',
+            error:{
+                exists: false,
+                message: ''
+            }
         }
     }
 
@@ -19,16 +23,29 @@ export default class Singup extends React.Component {
 
     signup(e){
         e.preventDefault()
-        fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-            .then(data =>{
-                const {user} = data
-                if(user){               //have to verify if the username already exists
-                    user.updateProfile({
-                        displayName: this.state.username
-                    })
-                }
-            })
-            .catch(error => console.log(error))
+        fire.database().ref('/').once("value")
+        .then((data) => {
+            let allUsers = Object.keys(data.val())
+            if(!allUsers.includes(this.state.username)){
+                fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+                .then(data =>{
+                    const {user} = data
+                    if(user){  
+                        user.updateProfile({
+                            displayName: this.state.username
+                        })
+                    }
+                })
+                .catch((error) => this.setState( { error:{ exists: true, message: error.message } } ))
+            }else{
+                throw new Error('username already exists')
+            }
+        })
+        .catch( (error) =>
+            this.setState( { error:{ exists: true, message: error.message } } )
+         )
+        
+        
     }
 
     authListener(){
@@ -50,9 +67,10 @@ export default class Singup extends React.Component {
     }
 
     render(){
-        
+        const error = this.state.error.exists
+        const message = this.state.error.message
         return (
-            <div>
+            <div id = 'sign-form'>
                 <form onSubmit = {this.signup.bind(this)}>
                     <div className = 'username'>
                             <label htmlFor = 'UsernameInput' >Username: </label>
@@ -64,6 +82,7 @@ export default class Singup extends React.Component {
                             id = 'UsernameInput'
                             placeholder = 'Enter Username'
                             ></input>
+
                     </div>
 
                     <div className = 'email'>
@@ -88,10 +107,15 @@ export default class Singup extends React.Component {
                             id = 'passwordInput'
                             placeholder = 'Enter password'
                             ></input>
+
+                        {error &&(
+                            <p>{message}</p>
+                        )}
                     </div>
-                    <button type = 'submit' >Sign Up</button>
+
+                    <button type = 'submit' className = 'login-bt'>Sign Up</button>
                 </form>
-                <button className = 'link-button' onClick = {this._handleSignUp.bind(this)}>Already have a account</button>
+                <button className = 'link-button' onClick = {this._handleSignUp.bind(this)}>Already have an account</button>
             </div>
         )
     }

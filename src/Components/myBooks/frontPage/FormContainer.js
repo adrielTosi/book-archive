@@ -1,4 +1,6 @@
 import React from 'react'
+import '../../../SASS/App.scss'
+import magnifier from '../../../Images/magnifier.svg'
 
 export default class FormContainer extends React.Component {
     constructor(props){
@@ -20,9 +22,8 @@ export default class FormContainer extends React.Component {
     render(){
     return (
         <div>
-            <form onSubmit = {this._handleSubmit.bind(this)}>
+            <form className = 'search-form' onSubmit = {this._handleSubmit.bind(this)}>
                     
-                <label htmlFor = 'books-name'>Name:  </label>
                 <input
                 id = 'books-name'  
                 type = "text" 
@@ -31,7 +32,8 @@ export default class FormContainer extends React.Component {
                 value = {this.state.userInput} />   
                 
 
-                <input type ="submit" value = "Search" />
+                <button type ="submit"><img className = 'search-img' src = {magnifier} alt = 'search'/></button>
+                <p>Search for books you have read, click the add button to add to your list.</p>
             </form>
         </div>
     )

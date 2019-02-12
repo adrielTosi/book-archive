@@ -1,6 +1,6 @@
 import React from 'react'
 import fire from '../../config/fire'
-import '../../Components/myBooks/style.css'
+import '../../SASS/App.scss'
 import Signup from './signup'
 
 export default class Login extends React.Component {
@@ -24,7 +24,8 @@ export default class Login extends React.Component {
 
     login (e){
         e.preventDefault()
-        fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password) //promisse
+        fire.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+            .then(()=> console.log( fire.database().ref('/adrieltosi' )))
             .catch(error => console.log(error))
     }
    
@@ -32,9 +33,10 @@ export default class Login extends React.Component {
     render(){
         return (
             <div>
+                <div className = 'login-background'></div>   
                 {this.state.signup 
                 ?  (<Signup handleSignUp = {this.handleSignUp}/>)
-                : (
+                : (<div id = 'sign-form'>
                     <form>
                     <div className = 'email'>
                         <label htmlFor = 'emailInput' >Email Address: </label>
@@ -59,10 +61,10 @@ export default class Login extends React.Component {
                         placeholder = 'Enter password'
                         ></input>
                     </div>
-                    <button type = 'submit' onClick = {this.login.bind(this)}>Login</button>
+                    <button type = 'submit' onClick = {this.login.bind(this)} className = 'login-bt'>Login</button><br/>
                     <button className = 'link-button'onClick = {this.handleSignUp}>Or sign up...</button>
                 </form>
-                )}
+                </div>)}
             </div>
         )
     }

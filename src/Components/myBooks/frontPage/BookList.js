@@ -1,8 +1,7 @@
 import React from 'react'
 import BookCard from './bookCard'
 import Loading from '../../Loading/loading'
-import '../style.css'
-
+import '../../../SASS/App.scss'
 
 export default class BookList extends React.Component {
     constructor(props){

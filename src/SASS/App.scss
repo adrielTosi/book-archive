@@ -1,0 +1,259 @@
+$colors: (
+  primary: #223d1f,
+  
+
+  my-white: #e0fcda,
+  
+
+  secundary: #72BE2B,
+  secundary-light1: lighten(#72BE2B, 20%),
+  secundary-light2: lighten(#72BE2B, 40%),
+  secundary-light3: lighten(#72BE2B, 80%),
+
+);
+
+/* VARIABLES */
+$border: 15px;
+$mobile: 900px;
+
+/* FUNCTIONS */
+@function color($name){
+  @return map-get($colors, $name)
+};
+
+/* MIXINS */
+@import 'mixins';
+
+
+
+/* CASCADE */
+.App{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+
+  .logo-image{
+    height: 12em;
+    position:absolute;
+    z-index: 0;
+    top: 30%;
+    left: 20%;
+    transform: translate(-50%, -25%);
+    @include mobile {
+      height: 8em;
+      position:absolute;
+      z-index: 0;
+      top: 8%;
+      left: 50%;
+      transform: translate(-50%, -25%);
+    }
+  }
+      
+}
+
+.login-background{
+  clip-path: polygon(0 0, 72% 0, 51% 100%, 0% 100%);
+  background-color: color(primary);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+  @include mobile{
+    clip-path: polygon(100% 0, 100% 30%, 82% 100%, 0 100%, 0 0);
+  }
+}
+
+.main-background{
+  
+  background-color: color(primary);
+  width: 100%;
+  min-height: 100%;
+  position: absolute;
+  z-index: -1;
+}
+
+#sign-form{
+  @include sign-form;
+    form{
+      @import 'login-bt';
+      .email{
+        input{
+          @include input
+
+        }
+      }
+      .password{
+        input{
+          @include input
+        }
+      } 
+      .username{
+        input{
+          @include input
+        }
+      } 
+    }
+}
+
+
+.loading-page{
+  margin-top: 12%;
+  margin-left: 50%
+}
+
+.done {
+  margin-left: 5px;
+  max-height: 10px;
+}
+
+.header-container{
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-content: space-evenly;
+  background-color: #e0fcda;
+  background-image: url("data:image/svg+xml,%3Csvg width='84' height='48' viewBox='0 0 84 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h12v6H0V0zm28 8h12v6H28V8zm14-8h12v6H42V0zm14 0h12v6H56V0zm0 8h12v6H56V8zM42 8h12v6H42V8zm0 16h12v6H42v-6zm14-8h12v6H56v-6zm14 0h12v6H70v-6zm0-16h12v6H70V0zM28 32h12v6H28v-6zM14 16h12v6H14v-6zM0 24h12v6H0v-6zm0 8h12v6H0v-6zm14 0h12v6H14v-6zm14 8h12v6H28v-6zm-14 0h12v6H14v-6zm28 0h12v6H42v-6zm14-8h12v6H56v-6zm0-8h12v6H56v-6zm14 8h12v6H70v-6zm0 8h12v6H70v-6zM14 24h12v6H14v-6zm14-8h12v6H28v-6zM14 8h12v6H14V8zM0 8h12v6H0V8z' fill='%23223d1f' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+    .logo-img{
+    box-shadow: inset 0px 0px 166px 85px rgba(224,252,218,1), 0px 0px 30px 10px rgba(224,252,218,1);
+    width: 25%
+  }
+  .header-link{
+    text-decoration: none;
+    color: color(primary)
+  }
+  .home{
+    @include header-item
+
+  }
+  .header-haveRead{
+    @include header-item
+
+  }
+  .about{
+    @include header-item
+  }
+  .inside{
+    background-color: color(primary);
+    .header-link{
+      color: color(my-white)
+    }
+  }
+  .logout-bt{
+    justify-self: flex-end;
+    margin-left: 1em;
+    margin-top: 1em;
+    button{
+      border: none;
+      background-color: transparent;
+      .logout-img{
+        height: 1.5em;
+        width: 1.5em;
+        border: none;
+        cursor: pointer;  
+        outline: none;      
+      }
+    }
+  }
+}
+
+.search-form{
+  padding: 1em;
+  margin: 1em;
+  background-color: color(my-white);
+  border-radius: 10px;
+  
+  input{
+    width: 50%;
+    height: 2em;
+    border:none;
+    border-bottom: 2px solid rgb(199, 197, 197);
+    background-color: #cff1c8;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    
+  }
+    button{
+      background-color: transparent;
+      border:none;
+      cursor: pointer;
+      height: 2em;  
+      .search-img{
+        width: 1.5em;
+        height: 1.5em;
+    }
+  }
+}
+
+.individual-book-container{
+  margin: 1em auto;
+}
+.addBooks-container{
+  text-align: center
+}
+
+.map-bookcard {
+  background-color: color(primary);
+  height: 100%;
+}
+
+.book-card{
+  border: 1px solid #889984;
+  margin: 1px auto;
+  width: 80%;
+  background-color: color(my-white);
+  border-radius: 12px;
+  box-shadow: 0px 0px 16px 0px rgba(0,0,0,0.75);
+  padding:  1em;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  align-items: start;
+    
+    .card-thumbnail{
+      float:left;
+      grid-row: 1/2;
+    }
+    .card-info{
+      grid-row: 1/3;
+      padding: 0.5 em;
+      color: color(primary);
+      display:grid;
+
+      h6{
+        margin: 0.25em;
+      }
+      @import 'add-delete-bt';
+
+      .toggle-info{
+        cursor: pointer;
+        color: rgb(93, 101, 182)
+        
+      }
+
+    }
+    .description{
+      grid-column: 1/2;
+      grid-row: 2/3;
+      
+    }
+}
+  
+.book-title{
+  display:flex;
+  align-content: space-evenly
+}
+
+.link-button {
+  margin-left: 4px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.link-button:hover,
+.link-button:focus {
+text-decoration: none;
+}

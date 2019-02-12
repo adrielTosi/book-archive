@@ -1,12 +1,10 @@
 import React from 'react'
-import '../style.css'
-import BookCard from './bookCard'
+import '../../../SASS/App.scss'
 import { connect } from 'react-redux'
 import  {changeSearch} from '../../../Redux/actionCreator'
 import FormContainer from './FormContainer'
 import fire from '../../../config/fire'
 import dealWithProps from '../dealWithProps'
-import Loading from '../../Loading/loading'
 import BookList from './BookList'
 
 
@@ -20,13 +18,13 @@ class AddBooks extends React.Component {
     }
     this.handleFetch = this.handleFetch.bind(this)
     this.handleAddToHaveRead = this.handleAddToHaveRead.bind(this)
-
     }
 
     logout(){
         fire.auth().signOut()
     }
 
+   
 
     handleFetch (userInput){
         if(userInput !== ''){
@@ -38,7 +36,7 @@ class AddBooks extends React.Component {
         }
     }
 
-    handleAddToHaveRead(bookInfo){ //modify to firebase
+    handleAddToHaveRead(bookInfo){ 
         let newStorage
         const database = fire.database().ref('/' + this.state.username + '/haveRead')
         
@@ -68,9 +66,12 @@ class AddBooks extends React.Component {
                 this.setState( { username: user.displayName } )
             }
         })
+        this.props.toggleInside('inAddBooks')
     }
 
-
+    componentWillUnmount(){
+        this.props.toggleInside('inAddBooks')
+    }
 
     render(){
         return (
@@ -78,16 +79,10 @@ class AddBooks extends React.Component {
                 
                 <FormContainer handleFetch = {this.handleFetch}/>
 
-                <BookList 
-                userSearch = {this.props.userSearch} 
-                handleAddToHaveRead = {this.handleAddToHaveRead}
+                <BookList userSearch = {this.props.userSearch} 
+                          handleAddToHaveRead = {this.handleAddToHaveRead}
                 />
-
-                <br/>
-                <br/>
-                <button onClick = {this.logout.bind(this)}>Log Out</button>
             </div>
-
         )
     }
 

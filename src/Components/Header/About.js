@@ -1,12 +1,24 @@
 import React from "react"
 
+class About extends React.Component{
+    
+    componentDidMount(){
+        this.props.toggleInside('inAbout')
+    }
+    
+    componentWillUnmount(){
+        this.props.toggleInside('inAbout')
+    }
 
-function About (){
-    return (
-        <div>
-            This is the About page
-        </div>
-    )
-}
+
+    
+    render(){
+        return (
+            <div>
+                This is the About page
+            </div>
+        )
+        }
+    }
 
 export default About

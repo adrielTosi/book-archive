@@ -2,7 +2,6 @@ import React from 'react'
 import BookCard from '../frontPage/bookCard';
 import fire from '../../../config/fire'
 import '../style.css'
-import NOCOVER from '../../../NOCOVER.jpg'
 import Loading from '../../Loading/loading'
 
 export default class HaveRead extends React.Component {
@@ -28,6 +27,14 @@ export default class HaveRead extends React.Component {
         
     }
 
+    handleObjectToArray(obj){ //-> makes data from firebase (JSON-like tree) an array of objects
+        let arrayHaveRead = []
+        for(let keys in obj){
+            arrayHaveRead.push(obj[keys])
+        }
+        return arrayHaveRead
+    }
+    
     componentDidMount(){ 
         fire.auth().onAuthStateChanged ( user => {
             if(user){
@@ -36,17 +43,14 @@ export default class HaveRead extends React.Component {
                 .then(() => this.setState( { isLoading: false } )) 
             }
         })
+        this.props.toggleInside('inHaveRead')
     }
     componentWillMount(){
         this.setState( { isLoading: true } )
     }
 
-    handleObjectToArray(obj){ //makes data from firebase (JSON-like tree) an array of objects
-        let arrayHaveRead = []
-        for(let keys in obj){
-            arrayHaveRead.push(obj[keys])
-        }
-        return arrayHaveRead
+    componentWillUnmount(){
+        this.props.toggleInside('inHaveRead')
     }
                  
     render(){
@@ -58,7 +62,7 @@ export default class HaveRead extends React.Component {
         }else{
         let arrayOfBooks = this.handleObjectToArray(this.state.haveReadItens)
         return(
-            <div>
+            <div className = 'map-bookcard'>
                 {this.state.haveReadItens === [] && ( //no working. find out why
                     <p>No books yet!</p>
                 )}

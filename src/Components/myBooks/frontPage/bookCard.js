@@ -1,8 +1,9 @@
 import React from 'react'
-import '../style.css'
+import '../../../SASS/App.scss'
 import NOCOVER from '../../../NOCOVER.jpg'
 import done from '../../../done.png'
 import MoreInfo from './moreInfo'
+import Description from './description'
 
 //accepted props
 //bookInfo: <-----
@@ -64,42 +65,47 @@ export default class BookCard extends React.Component {
         } else {
             thumbnail = <img src = {this.props.bookInfo.volumeInfo.imageLinks.thumbnail} alt = 'No book cover'></img>
         }
+
+
         return(
             <div className = 'individual-book-container' key = {this.props.bookInfo.id}>
 
                 <div className = "book-card" >
-                    <div>
+                    <div className = 'card-thumbnail'>
                         {thumbnail}
                     </div>
-                    <div>
+                    
+                    {this.state.toggleInfo === true && (
+                        <Description Info = {this.props.bookInfo}/>
+                    )}
+
+                    <div className = 'card-info'>
                         <h4> {this.props.bookInfo.volumeInfo.title} </h4>
                         <h6> {authors} </h6>
-                        <br/>
-
+                        
                         {(!this.state.toggleInfo) && (
-                        <span onClick = {this.handleToggleInfo.bind(this)} className = 'toggle-info'>More...</span>
+                            <span onClick = {this.handleToggleInfo.bind(this)} className = 'toggle-info'>More...</span>
                         )}
 
-{/*Toggle Info*/}       {this.state.toggleInfo === true && (
+{/*More info*/}         {this.state.toggleInfo === true && (
                         <div>
                             <MoreInfo 
                             Info ={this.props.bookInfo} 
                             />
-
+                        
                         <span onClick = {this.handleToggleInfo.bind(this)} className = 'toggle-info'>Less...</span>
                         </div>
                         )}
 
                         <br/>
+                        <br/>
+                        <br/>
+                        <br/>
 {/*Delete book*/}       {this.props.canDelete === true && (
-                            <button onClick = {this._handleDeleteFromHaveRead.bind(this)}>Delete</button>
+                            <button className = 'delete-bt'onClick = {this._handleDeleteFromHaveRead.bind(this)}>Delete</button>
                         )}
 {/*add book to list*/}  {this.props.canAddToHaveRead === true && (
-                            <button onClick = {this._handleAddToHaveRead.bind(this)}>Add</button> //in future, two options, haveRead e WannaRead
-                        )}
-
-{/*Add confirm*/}       {this.state.isAdded === true && this.props.canAddToHaveRead === true && (
-                            <span ><img src = {done} alt = 'added' className = 'done'></img></span>
+                            <button className = 'add-bt' onClick = {this._handleAddToHaveRead.bind(this)}>+</button> //in future, two options, haveRead e WannaRead
                         )}
 
                     </div>
